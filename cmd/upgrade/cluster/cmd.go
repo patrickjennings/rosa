@@ -315,7 +315,11 @@ func runWithRuntime(r *rosa.Runtime, cmd *cobra.Command) error {
 	// if cluster is sts validate roles are compatible with upgrade version
 	// for automatic upgrades, version is not available
 	if isSTS && !currentUpgradeScheduling.AutomaticUpgrades {
-		checkSTSRolesCompatibility(r, cluster, mode, version, clusterKey)
+		upgradeVersion := version
+		if upgradeVersion == "" && len(availableUpgrades) > 0 {
+			upgradeVersion = availableUpgrades[len(availableUpgrades)-1]
+		}
+		checkSTSRolesCompatibility(r, cluster, mode, upgradeVersion, clusterKey)
 	}
 
 	// Compute drain grace period config
