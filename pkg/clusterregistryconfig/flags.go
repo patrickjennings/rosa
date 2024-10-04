@@ -147,12 +147,17 @@ func GetClusterRegistryConfigOptions(cmd *pflag.FlagSet,
 	}
 
 	if interactive.Enabled() && isHostedCP {
+		regConfigQuestion := "Enable registries config"
+		if cluster != nil {
+			regConfigQuestion = "Update registries config"
+		}
+
 		updateRegistriesConfigValue, err := interactive.GetBool(interactive.Input{
-			Question: "Enable registries config",
+			Question: regConfigQuestion,
 			Default:  enableRegistriesConfig,
 		})
 		if err != nil {
-			return nil, fmt.Errorf("Expected a valid value: %s", err)
+			return nil, fmt.Errorf("Expected a valid registries config value: %s", err)
 		}
 		enableRegistriesConfig = updateRegistriesConfigValue
 	}
